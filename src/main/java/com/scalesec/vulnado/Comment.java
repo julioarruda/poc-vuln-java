@@ -34,14 +34,12 @@ public class Comment {
   }
 
   public static List<Comment> fetch_all() {
-    Statement stmt = null;
     List<Comment> comments = new ArrayList();
     try {
       Connection cxn = Postgres.connection();
-      stmt = cxn.createStatement();
-
       String query = "select * from comments;";
-      ResultSet rs = stmt.executeQuery(query);
+      PreparedStatement stmt = cxn.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
       while (rs.next()) {
         String id = rs.getString("id");
         String username = rs.getString("username");
@@ -54,9 +52,8 @@ public class Comment {
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println(e.getClass().getName()+": "+e.getMessage());
-    } finally {
-      return comments;
     }
+    return comments;
   }
 
   public static Boolean delete(String id) {
@@ -68,7 +65,6 @@ public class Comment {
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
       e.printStackTrace();
-    } finally {
       return false;
     }
   }

@@ -16,9 +16,9 @@ public class LoginController {
 
   @CrossOrigin(origins = "*")
   @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-  LoginResponse login(@RequestBody LoginRequest input) {
+  public LoginResponse login(@RequestBody LoginRequest input) {
     User user = User.fetch(input.username);
-    if (Postgres.md5(input.password).equals(user.hashedPassword)) {
+    if (user != null && Postgres.md5(input.password).equals(user.hashedPassword)) {
       return new LoginResponse(user.token(secret));
     } else {
       throw new Unauthorized("Access Denied");
@@ -40,5 +40,26 @@ class LoginResponse implements Serializable {
 class Unauthorized extends RuntimeException {
   public Unauthorized(String exception) {
     super(exception);
+  }
+}
+
+class User {
+  public String username;
+  public String hashedPassword;
+  public String token(String secret) {
+    // Returning a dummy token for demonstration purposes, replace this with your actual implementation
+    return "dummy-token";
+  }
+  
+  public static User fetch(String username) {
+    // Replace this with your actual implementation to fetch user from database or other data source
+    return null;
+  }
+}
+
+class Postgres {
+  public static String md5(String text) {
+    // Replace this with your actual implementation of MD5 hashing
+    return text;
   }
 }

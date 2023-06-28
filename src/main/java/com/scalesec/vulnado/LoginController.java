@@ -13,16 +13,25 @@ import java.io.Serializable;
 public class LoginController {
   @Value("${app.secret}")
   private String secret;
+  private final UserRepository userRepository;
+
+  public LoginController(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   @CrossOrigin(origins = "*")
   @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
   LoginResponse login(@RequestBody LoginRequest input) {
-    User user = User.fetch(input.username);
-    if (Postgres.md5(input.password).equals(user.hashedPassword)) {
-      return new LoginResponse(user.token(secret));
+    User user = userRepository.findByUsername(input.username);
+    if (user != null && isPasswordMatch(user, input.password)) {
+      return new LoginResponse(user.generateToken(secret));
     } else {
       throw new Unauthorized("Access Denied");
     }
+  }
+
+  private boolean isPasswordMatch(User user, String password) {
+    return BCrypt.checkpw(password, user.hashedPassword);
   }
 }
 

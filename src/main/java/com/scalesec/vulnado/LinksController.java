@@ -13,11 +13,12 @@ import java.io.IOException;
 @EnableAutoConfiguration
 public class LinksController {
   @RequestMapping(value = "/links", produces = "application/json")
-  List<String> links(@RequestParam String url) throws IOException{
+  public List<String> links(@RequestParam String url) throws IOException{
     return LinkLister.getLinks(url);
   }
+  
   @RequestMapping(value = "/links-v2", produces = "application/json")
-  List<String> linksV2(@RequestParam String url) throws BadRequest{
+  public List<String> linksV2(@RequestParam String url) throws BadRequest{
     return LinkLister.getLinksV2(url);
   }
 }

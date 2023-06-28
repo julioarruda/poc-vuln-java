@@ -55,32 +55,58 @@ public class Comment {
       e.printStackTrace();
       System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
+      try {
+        if (stmt != null) {
+          stmt.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
       return comments;
     }
   }
 
   public static Boolean delete(String id) {
+    Connection con = null;
     try {
+      con = Postgres.connection();
       String sql = "DELETE FROM comments where id = ?";
-      Connection con = Postgres.connection();
       PreparedStatement pStatement = con.prepareStatement(sql);
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
       e.printStackTrace();
     } finally {
+      try {
+        if (con != null) {
+          con.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
       return false;
     }
   }
 
   private Boolean commit() throws SQLException {
-    String sql = "INSERT INTO comments (id, username, body, created_on) VALUES (?,?,?,?)";
-    Connection con = Postgres.connection();
-    PreparedStatement pStatement = con.prepareStatement(sql);
-    pStatement.setString(1, this.id);
-    pStatement.setString(2, this.username);
-    pStatement.setString(3, this.body);
-    pStatement.setTimestamp(4, this.created_on);
-    return 1 == pStatement.executeUpdate();
+    Connection con = null;
+    try {
+      con = Postgres.connection();
+      String sql = "INSERT INTO comments (id, username, body, created_on) VALUES (?,?,?,?)";
+      PreparedStatement pStatement = con.prepareStatement(sql);
+      pStatement.setString(1, this.id);
+      pStatement.setString(2, this.username);
+      pStatement.setString(3, this.body);
+      pStatement.setTimestamp(4, this.created_on);
+      return 1 == pStatement.executeUpdate();
+    } finally {
+      try {
+        if (con != null) {
+          con.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
   }
 }

@@ -16,13 +16,18 @@ public class LoginController {
 
   @CrossOrigin(origins = "*")
   @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-  LoginResponse login(@RequestBody LoginRequest input) {
+  public LoginResponse login(@RequestBody LoginRequest input) {
     User user = User.fetch(input.username);
-    if (Postgres.md5(input.password).equals(user.hashedPassword)) {
+    if (checkPassword(input.password, user.hashedPassword)) {
       return new LoginResponse(user.token(secret));
     } else {
       throw new Unauthorized("Access Denied");
     }
+  }
+
+  private boolean checkPassword(String password, String hashedPassword) {
+    String hashedInputPassword = Postgres.md5(password);
+    return hashedInputPassword.equals(hashedPassword);
   }
 }
 
@@ -33,7 +38,10 @@ class LoginRequest implements Serializable {
 
 class LoginResponse implements Serializable {
   public String token;
-  public LoginResponse(String msg) { this.token = msg; }
+
+  public LoginResponse(String token) {
+    this.token = token;
+  }
 }
 
 @ResponseStatus(HttpStatus.UNAUTHORIZED)

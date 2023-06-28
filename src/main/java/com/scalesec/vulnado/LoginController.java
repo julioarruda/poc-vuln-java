@@ -8,15 +8,17 @@ import org.springframework.stereotype.*;
 import org.springframework.beans.factory.annotation.*;
 import java.io.Serializable;
 
+import javax.validation.Valid;
+
 @RestController
 @EnableAutoConfiguration
 public class LoginController {
   @Value("${app.secret}")
   private String secret;
 
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(origins = "https://trusted-origin.com")
   @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-  LoginResponse login(@RequestBody LoginRequest input) {
+  LoginResponse login(@Valid @RequestBody LoginRequest input) {
     User user = User.fetch(input.username);
     if (Postgres.md5(input.password).equals(user.hashedPassword)) {
       return new LoginResponse(user.token(secret));

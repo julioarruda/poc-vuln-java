@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.*;
 import org.springframework.stereotype.*;
 import org.springframework.beans.factory.annotation.*;
 import java.io.Serializable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 @RestController
 @EnableAutoConfiguration
@@ -18,7 +20,9 @@ public class LoginController {
   @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
   LoginResponse login(@RequestBody LoginRequest input) {
     User user = User.fetch(input.username);
-    if (Postgres.md5(input.password).equals(user.hashedPassword)) {
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    boolean matches = passwordEncoder.matches(input.password, user.hashedPassword);
+    if (matches) {
       return new LoginResponse(user.token(secret));
     } else {
       throw new Unauthorized("Access Denied");

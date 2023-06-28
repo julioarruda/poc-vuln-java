@@ -35,8 +35,8 @@ public class Postgres {
             Statement stmt = c.createStatement();
 
             // Create Schema
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS users(user_id VARCHAR (36) PRIMARY KEY, username VARCHAR (50) UNIQUE NOT NULL, password VARCHAR (50) NOT NULL, created_on TIMESTAMP NOT NULL, last_login TIMESTAMP)");
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS comments(id VARCHAR (36) PRIMARY KEY, username VARCHAR (36), body VARCHAR (500), created_on TIMESTAMP NOT NULL)");
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS users(user_id UUID DEFAULT gen_random_uuid() PRIMARY KEY, username VARCHAR (50) UNIQUE NOT NULL, password VARCHAR (50) NOT NULL, created_on TIMESTAMP NOT NULL, last_login TIMESTAMP)");
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS comments(id UUID DEFAULT gen_random_uuid() PRIMARY KEY, username UUID, body VARCHAR (500), created_on TIMESTAMP NOT NULL)");
 
             // Clean up any existing data
             stmt.executeUpdate("DELETE FROM users");
@@ -88,13 +88,12 @@ public class Postgres {
     }
 
     private static void insertUser(String username, String password) {
-       String sql = "INSERT INTO users (user_id, username, password, created_on) VALUES (?, ?, ?, current_timestamp)";
+       String sql = "INSERT INTO users (username, password, created_on) VALUES (?, ?, current_timestamp)";
        PreparedStatement pStatement = null;
        try {
           pStatement = connection().prepareStatement(sql);
-          pStatement.setString(1, UUID.randomUUID().toString());
-          pStatement.setString(2, username);
-          pStatement.setString(3, md5(password));
+          pStatement.setString(1, username);
+          pStatement.setString(2, md5(password));
           pStatement.executeUpdate();
        } catch(Exception e) {
          e.printStackTrace();
@@ -102,13 +101,12 @@ public class Postgres {
     }
 
     private static void insertComment(String username, String body) {
-        String sql = "INSERT INTO comments (id, username, body, created_on) VALUES (?, ?, ?, current_timestamp)";
+        String sql = "INSERT INTO comments (username, body, created_on) VALUES (?, ?, current_timestamp)";
         PreparedStatement pStatement = null;
         try {
             pStatement = connection().prepareStatement(sql);
-            pStatement.setString(1, UUID.randomUUID().toString());
-            pStatement.setString(2, username);
-            pStatement.setString(3, body);
+            pStatement.setString(1, username);
+            pStatement.setString(2, body);
             pStatement.executeUpdate();
         } catch(Exception e) {
             e.printStackTrace();

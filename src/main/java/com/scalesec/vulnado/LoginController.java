@@ -1,3 +1,4 @@
+```java
 package com.scalesec.vulnado;
 
 import org.springframework.boot.*;
@@ -18,7 +19,7 @@ public class LoginController {
   @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
   LoginResponse login(@RequestBody LoginRequest input) {
     User user = User.fetch(input.username);
-    if (Postgres.md5(input.password).equals(user.hashedPassword)) {
+    if (user != null && Postgres.md5(input.password).equals(user.hashedPassword)) {
       return new LoginResponse(user.token(secret));
     } else {
       throw new Unauthorized("Access Denied");
@@ -42,3 +43,5 @@ class Unauthorized extends RuntimeException {
     super(exception);
   }
 }
+```
+```

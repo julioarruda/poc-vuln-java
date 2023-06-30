@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -35,9 +37,10 @@ public class Comment {
 
   public static List<Comment> fetch_all() {
     Statement stmt = null;
+    Connection cxn = null;
     List<Comment> comments = new ArrayList();
     try {
-      Connection cxn = Postgres.connection();
+      cxn = Postgres.connection();
       stmt = cxn.createStatement();
 
       String query = "select * from comments;";
@@ -50,13 +53,19 @@ public class Comment {
         Comment c = new Comment(id, username, body, created_on);
         comments.add(c);
       }
-      cxn.close();
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
-      return comments;
+      if (cxn != null) {
+        try {
+          cxn.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
     }
+    return comments;
   }
 
   public static Boolean delete(String id) {

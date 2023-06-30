@@ -1,3 +1,6 @@
+-----------------
+
+
 package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
@@ -7,7 +10,7 @@ public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
     String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
+    // System.out.println(cmd); // Linha de depuração removida
     processBuilder.command("bash", "-c", cmd);
 
     StringBuilder output = new StringBuilder();
@@ -17,7 +20,7 @@ public class Cowsay {
       BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
       String line;
-      while ((line = reader.readLine()) != null) {
+      while ((linha = leitor.readLine()) != null) {
         output.append(line + "\n");
       }
     } catch (Exception e) {

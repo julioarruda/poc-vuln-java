@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.springframework.http.HttpStatus;
@@ -13,22 +15,28 @@ public class CommentsController {
   @Value("${app.secret}")
   private String secret;
 
-  @CrossOrigin(origins = "*")
+  // Adicione esta String com o domínio confiável
+  private String trustedDomain = "https://gft.com";
+
+  @CrossOrigin(origins = trustedDomain)
   @RequestMapping(value = "/comments", method = RequestMethod.GET, produces = "application/json")
   List<Comment> comments(@RequestHeader(value="x-auth-token") String token) {
     User.assertAuth(secret, token);
     return Comment.fetch_all();
   }
 
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(origins = trustedDomain)
   @RequestMapping(value = "/comments", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
   Comment createComment(@RequestHeader(value="x-auth-token") String token, @RequestBody CommentRequest input) {
+    // Adicione a verificação de autenticação antes de criar um novo comentário
+    User.assertAuth(secret, token);
     return Comment.create(input.username, input.body);
   }
 
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(origins = trustedDomain)
   @RequestMapping(value = "/comments/{id}", method = RequestMethod.DELETE, produces = "application/json")
   Boolean deleteComment(@RequestHeader(value="x-auth-token") String token, @PathVariable("id") String id) {
+    User.assertAuth(secret, token);
     return Comment.delete(id);
   }
 }

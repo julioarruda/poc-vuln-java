@@ -1,3 +1,6 @@
+-
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -6,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Comment {
   public String id, username, body;
@@ -52,7 +57,8 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      // e.printStackTrace(); // Remova essa linha
+      Logger.getLogger(Comment.class.getName()).log(Level.SEVERE, "Ocorreu um erro ao buscar todos os comentários", e);
       System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
       return comments;
@@ -67,7 +73,7 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      Logger.getLogger(Comment.class.getName()).log(Level.SEVERE, "Ocorreu um erro ao excluir comentário", e);
     } finally {
       return false;
     }

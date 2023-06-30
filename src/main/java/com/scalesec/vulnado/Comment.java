@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -52,8 +54,7 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      Logger.log(Level.ERROR, "Erro ao buscar todos os comentários: " + e.getMessage());
     } finally {
       return comments;
     }
@@ -67,7 +68,7 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      Logger.log(Level.ERROR, "Erro ao deletar comentário: " + e.getMessage());
     } finally {
       return false;
     }

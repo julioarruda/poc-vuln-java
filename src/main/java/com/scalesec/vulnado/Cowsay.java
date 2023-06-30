@@ -1,10 +1,18 @@
+
+
 package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.regex.Pattern;
 
 public class Cowsay {
   public static String run(String input) {
+    Pattern pattern = Pattern.compile("^[a-zA-Z0-9\\s]*$");
+    if (!pattern.matcher(input).matches()) {
+      throw new IllegalArgumentException("entrada inválida: " + input);
+    }
+
     ProcessBuilder processBuilder = new ProcessBuilder();
     String cmd = "/usr/games/cowsay '" + input + "'";
     System.out.println(cmd);

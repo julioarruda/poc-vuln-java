@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -52,8 +54,10 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      if(!Boolean.parseBoolean(System.getenv("PRODUCTION"))){
+        e.printStackTrace();
+        System.err.println(e.getClass().getName()+": "+e.getMessage());
+      }
     } finally {
       return comments;
     }
@@ -67,7 +71,9 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      if(!Boolean.parseBoolean(System.getenv("PRODUCTION"))){
+        e.printStackTrace();
+      }
     } finally {
       return false;
     }

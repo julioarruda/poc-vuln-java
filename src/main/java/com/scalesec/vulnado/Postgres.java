@@ -1,3 +1,5 @@
+-
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -30,7 +32,7 @@ public class Postgres {
     }
     public static void setup(){
         try {
-            System.out.println("Setting up Database...");
+            logDebug("Setting up Database...");
             Connection c = connection();
             Statement stmt = c.createStatement();
 
@@ -112,6 +114,12 @@ public class Postgres {
             pStatement.executeUpdate();
         } catch(Exception e) {
             e.printStackTrace();
+        }
+    }
+    
+    private static void logDebug(String message) {
+        if ("development".equalsIgnoreCase(System.getenv("APP_ENV"))) {
+            System.out.println(message);
         }
     }
 }

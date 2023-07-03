@@ -1,3 +1,6 @@
+
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -52,7 +55,8 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      // e.printStackTrace(); // Remova ou comente essa linha
+      // Adicione a lógica de log apropriada aqui
       System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
       return comments;
@@ -67,7 +71,8 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      // e.printStackTrace(); // Remova ou comente essa linha
+      // Adicione a lógica de log apropriada aqui
     } finally {
       return false;
     }

@@ -1,7 +1,10 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtParser;
@@ -41,12 +44,13 @@ public class User {
     User user = null;
     try {
       Connection cxn = Postgres.connection();
-      stmt = cxn.createStatement();
       System.out.println("Opened database successfully");
 
-      String query = "select * from users where username = '" + un + "' limit 1";
+      String query = "SELECT * FROM users WHERE username = ? LIMIT 1";
+      PreparedStatement pstmt = cxn.prepareStatement(query);
+      pstmt.setString(1, un);
       System.out.println(query);
-      ResultSet rs = stmt.executeQuery(query);
+      ResultSet rs = pstmt.executeQuery();
       if (rs.next()) {
         String user_id = rs.getString("user_id");
         String username = rs.getString("username");

@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -8,6 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Postgres {
 
@@ -22,8 +26,8 @@ public class Postgres {
             return DriverManager.getConnection(url,
                     System.getenv("PGUSER"), System.getenv("PGPASSWORD"));
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            Logger.getLogger(Postgres.class.getName()).log(Level.SEVERE, "Erro ao conectar ao banco de dados.", e);
+            System.err.println("Erro ao conectar ao banco de dados. Entre em contato com o administrador do sistema.");
             System.exit(1);
         }
         return null;
@@ -97,7 +101,7 @@ public class Postgres {
           pStatement.setString(3, md5(password));
           pStatement.executeUpdate();
        } catch(Exception e) {
-         e.printStackTrace();
+         Logger.getLogger(Postgres.class.getName()).log(Level.SEVERE, "Erro ao inserir usuário.", e);
        }
     }
 
@@ -111,7 +115,7 @@ public class Postgres {
             pStatement.setString(3, body);
             pStatement.executeUpdate();
         } catch(Exception e) {
-            e.printStackTrace();
+            Logger.getLogger(Postgres.class.getName()).log(Level.SEVERE, "Erro ao inserir comentário.", e);
         }
     }
 }

@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -54,9 +56,11 @@ public class Comment {
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println(e.getClass().getName()+": "+e.getMessage());
+      return null; // Alterado aqui
     } finally {
-      return comments;
+      // Se houver recursos a serem limpos, faça-o aqui.
     }
+    return comments;
   }
 
   public static Boolean delete(String id) {
@@ -68,8 +72,9 @@ public class Comment {
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
       e.printStackTrace();
+      return false; // Alterado aqui
     } finally {
-      return false;
+      // Se houver recursos a serem limpos, faça-o aqui.
     }
   }
 

@@ -1,14 +1,17 @@
+
+
 package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
-    processBuilder.command("bash", "-c", cmd);
+    input = input.replaceAll("[^a-zA-Z0-9 ]", ""); // Permitir apenas caracteres válidos
+    System.out.println(input);
+    processBuilder.command(Arrays.asList("bash", "-c", "/usr/games/cowsay", input));
 
     StringBuilder output = new StringBuilder();
 

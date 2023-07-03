@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -6,10 +8,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Comment {
   public String id, username, body;
   public Timestamp created_on;
+  private static final Logger logger = Logger.getLogger(Comment.class.getName());
 
   public Comment(String id, String username, String body, Timestamp created_on) {
     this.id = id;
@@ -52,8 +57,8 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      // Correção: remover 'e.printStackTrace()' e adicionar uma chamada para o logger.
+      logger.log(Level.SEVERE, "Error while fetching all comments", e);
     } finally {
       return comments;
     }

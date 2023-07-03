@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -22,7 +24,7 @@ public class Postgres {
             return DriverManager.getConnection(url,
                     System.getenv("PGUSER"), System.getenv("PGPASSWORD"));
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
             System.exit(1);
         }
@@ -53,7 +55,7 @@ public class Postgres {
             insertComment("alice", "OMG so cute!");
             c.close();
         } catch (Exception e) {
-            System.out.println(e);
+            //System.out.println(e);
             System.exit(1);
         }
     }

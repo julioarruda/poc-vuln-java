@@ -1,8 +1,11 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
@@ -58,31 +61,19 @@ public class Postgres {
         }
     }
 
-    // Java program to calculate MD5 hash value
-    public static String md5(String input)
+    public static String sha256(String input)
     {
         try {
-
-            // Static getInstance method is called with hashing MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
-
-            // digest() method is called to calculate message digest
-            //  of an input digest() return array of byte
-            byte[] messageDigest = md.digest(input.getBytes());
-
-            // Convert byte array into signum representation
-            BigInteger no = new BigInteger(1, messageDigest);
-
-            // Convert message digest into hex value
-            String hashtext = no.toString(16);
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
             }
-            return hashtext;
-        }
-
-        // For specifying wrong message digest algorithms
-        catch (NoSuchAlgorithmException e) {
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
@@ -94,7 +85,7 @@ public class Postgres {
           pStatement = connection().prepareStatement(sql);
           pStatement.setString(1, UUID.randomUUID().toString());
           pStatement.setString(2, username);
-          pStatement.setString(3, md5(password));
+          pStatement.setString(3, sha256(password));
           pStatement.executeUpdate();
        } catch(Exception e) {
          e.printStackTrace();

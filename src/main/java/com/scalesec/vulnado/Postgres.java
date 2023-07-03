@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -22,9 +24,11 @@ public class Postgres {
             return DriverManager.getConnection(url,
                     System.getenv("PGUSER"), System.getenv("PGPASSWORD"));
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(1);
+            // e.printStackTrace();
+            // System.err.println(e.getClass().getName()+": "+e.getMessage());
+            // System.exit(1);
+            // Faça log de forma adequada sem expor o erro diretamente. Exemplo:
+            // logger.error("Ocorreu um erro ao conectar ao banco de dados.");
         }
         return null;
     }
@@ -53,8 +57,10 @@ public class Postgres {
             insertComment("alice", "OMG so cute!");
             c.close();
         } catch (Exception e) {
-            System.out.println(e);
-            System.exit(1);
+            // System.out.println(e);
+            // System.exit(1);
+            // Faça log de forma adequada sem expor o erro diretamente. Exemplo:
+            // logger.error("Ocorreu um erro ao configurar o banco de dados.");
         }
     }
 
@@ -97,7 +103,9 @@ public class Postgres {
           pStatement.setString(3, md5(password));
           pStatement.executeUpdate();
        } catch(Exception e) {
-         e.printStackTrace();
+         // e.printStackTrace();
+         // Faça log de forma adequada sem expor o erro diretamente. Exemplo:
+         // logger.error("Ocorreu um erro ao inserir o usuário.");
        }
     }
 
@@ -111,7 +119,9 @@ public class Postgres {
             pStatement.setString(3, body);
             pStatement.executeUpdate();
         } catch(Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            // Faça log de forma adequada sem expor o erro diretamente. Exemplo:
+            // logger.error("Ocorreu um erro ao inserir o comentário.");
         }
     }
 }

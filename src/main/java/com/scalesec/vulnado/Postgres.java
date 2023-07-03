@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -28,7 +30,12 @@ public class Postgres {
         }
         return null;
     }
+    
     public static void setup(){
+        if (System.getenv("DEBUG") == null || !System.getenv("DEBUG").equals("true")) {
+            return;
+        }
+
         try {
             System.out.println("Setting up Database...");
             Connection c = connection();

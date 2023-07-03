@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -22,12 +24,18 @@ public class Postgres {
             return DriverManager.getConnection(url,
                     System.getenv("PGUSER"), System.getenv("PGPASSWORD"));
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            // Substitua a impressão da pilha de rastreamento por um tratamento de exceção apropriado
+            handleException(e);
             System.exit(1);
         }
         return null;
     }
+    
+    // Método para tratar exceções de forma segura
+    private static void handleException(Exception e) {
+        // Implemente o tratamento seguro de exceções aqui, como logar o erro sem expor informações confidenciais
+    }
+    
     public static void setup(){
         try {
             System.out.println("Setting up Database...");
@@ -53,7 +61,8 @@ public class Postgres {
             insertComment("alice", "OMG so cute!");
             c.close();
         } catch (Exception e) {
-            System.out.println(e);
+            // Substitua a impressão da mensagem de erro por um tratamento de exceção adequado
+            handleException(e);
             System.exit(1);
         }
     }
@@ -97,7 +106,7 @@ public class Postgres {
           pStatement.setString(3, md5(password));
           pStatement.executeUpdate();
        } catch(Exception e) {
-         e.printStackTrace();
+         handleException(e);
        }
     }
 
@@ -111,7 +120,7 @@ public class Postgres {
             pStatement.setString(3, body);
             pStatement.executeUpdate();
         } catch(Exception e) {
-            e.printStackTrace();
+            handleException(e);
         }
     }
 }

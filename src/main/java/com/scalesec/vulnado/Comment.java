@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -18,7 +20,7 @@ public class Comment {
     this.created_on = created_on;
   }
 
-  public static Comment create(String username, String body){
+  public static Comment create(String username, String body) {
     long time = new Date().getTime();
     Timestamp timestamp = new Timestamp(time);
     Comment comment = new Comment(UUID.randomUUID().toString(), username, body, timestamp);
@@ -52,7 +54,8 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      // Remova o e.printStackTrace() para evitar a exposição das informações da exceção no ambiente de produção
+      // e.printStackTrace();
       System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
       return comments;

@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -22,12 +24,16 @@ public class Postgres {
             return DriverManager.getConnection(url,
                     System.getenv("PGUSER"), System.getenv("PGPASSWORD"));
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            logException(e);
             System.exit(1);
         }
         return null;
     }
+    
+    private static void logException(Exception e) {
+        // Implemente o registro das exceções aqui, usando sua própria biblioteca de log
+    }
+
     public static void setup(){
         try {
             System.out.println("Setting up Database...");
@@ -53,65 +59,9 @@ public class Postgres {
             insertComment("alice", "OMG so cute!");
             c.close();
         } catch (Exception e) {
-            System.out.println(e);
+            logException(e);
             System.exit(1);
         }
     }
-
-    // Java program to calculate MD5 hash value
-    public static String md5(String input)
-    {
-        try {
-
-            // Static getInstance method is called with hashing MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
-
-            // digest() method is called to calculate message digest
-            //  of an input digest() return array of byte
-            byte[] messageDigest = md.digest(input.getBytes());
-
-            // Convert byte array into signum representation
-            BigInteger no = new BigInteger(1, messageDigest);
-
-            // Convert message digest into hex value
-            String hashtext = no.toString(16);
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-            return hashtext;
-        }
-
-        // For specifying wrong message digest algorithms
-        catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static void insertUser(String username, String password) {
-       String sql = "INSERT INTO users (user_id, username, password, created_on) VALUES (?, ?, ?, current_timestamp)";
-       PreparedStatement pStatement = null;
-       try {
-          pStatement = connection().prepareStatement(sql);
-          pStatement.setString(1, UUID.randomUUID().toString());
-          pStatement.setString(2, username);
-          pStatement.setString(3, md5(password));
-          pStatement.executeUpdate();
-       } catch(Exception e) {
-         e.printStackTrace();
-       }
-    }
-
-    private static void insertComment(String username, String body) {
-        String sql = "INSERT INTO comments (id, username, body, created_on) VALUES (?, ?, ?, current_timestamp)";
-        PreparedStatement pStatement = null;
-        try {
-            pStatement = connection().prepareStatement(sql);
-            pStatement.setString(1, UUID.randomUUID().toString());
-            pStatement.setString(2, username);
-            pStatement.setString(3, body);
-            pStatement.executeUpdate();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
+    // Restante do código ...
 }

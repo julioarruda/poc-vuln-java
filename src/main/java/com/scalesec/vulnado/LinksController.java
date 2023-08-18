@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.springframework.boot.*;
@@ -12,12 +14,27 @@ import java.io.IOException;
 @RestController
 @EnableAutoConfiguration
 public class LinksController {
+  
+  private boolean isValidURL(String url) {
+    String allowedDomain = "https://gft.com/";
+    return (url != null) && url.startsWith(allowedDomain);
+  }
+
   @RequestMapping(value = "/links", produces = "application/json")
   List<String> links(@RequestParam String url) throws IOException{
-    return LinkLister.getLinks(url);
+    if (isValidURL(url)) {
+      return LinkLister.getLinks(url);
+    } else {
+      throw new BadRequest("Invalid URL provided");
+    }
   }
+
   @RequestMapping(value = "/links-v2", produces = "application/json")
   List<String> linksV2(@RequestParam String url) throws BadRequest{
-    return LinkLister.getLinksV2(url);
+    if (isValidURL(url)) {
+      return LinkLister.getLinksV2(url);
+    } else {
+      throw new BadRequest("Invalid URL provided");
+    }
   }
 }

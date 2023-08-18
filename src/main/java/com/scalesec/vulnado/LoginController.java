@@ -1,3 +1,4 @@
+
 package com.scalesec.vulnado;
 
 import org.springframework.boot.*;
@@ -7,6 +8,9 @@ import org.springframework.boot.autoconfigure.*;
 import org.springframework.stereotype.*;
 import org.springframework.beans.factory.annotation.*;
 import java.io.Serializable;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @RestController
 @EnableAutoConfiguration
@@ -14,15 +18,23 @@ public class LoginController {
   @Value("${app.secret}")
   private String secret;
 
-  @CrossOrigin(origins = "*")
+  @Autowired
+  private BCryptPasswordEncoder passwordEncoder;
+
+  @CrossOrigin(origins = "https://gft.com")
   @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
   LoginResponse login(@RequestBody LoginRequest input) {
     User user = User.fetch(input.username);
-    if (Postgres.md5(input.password).equals(user.hashedPassword)) {
+    if (passwordEncoder.matches(input.password, user.hashedPassword)) {
       return new LoginResponse(user.token(secret));
     } else {
       throw new Unauthorized("Access Denied");
     }
+  }
+
+  @Bean
+  public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 }
 

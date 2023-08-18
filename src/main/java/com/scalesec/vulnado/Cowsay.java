@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
@@ -6,8 +8,10 @@ import java.io.InputStreamReader;
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
+    // Validar e tratar a entrada do usuário antes de formar o comando.
     String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
+    // Comente ou remova a linha abaixo.
+    // System.out.println(cmd);
     processBuilder.command("bash", "-c", cmd);
 
     StringBuilder output = new StringBuilder();

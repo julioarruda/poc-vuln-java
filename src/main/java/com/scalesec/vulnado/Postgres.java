@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -8,8 +10,10 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class Postgres {
+    private static final Logger logger = Logger.getLogger(Postgres.class.getName());
 
     public static Connection connection() {
         try {
@@ -28,19 +32,20 @@ public class Postgres {
         }
         return null;
     }
+
     public static void setup(){
         try {
-            System.out.println("Setting up Database...");
+            logger.info("Setting up Database...");
             Connection c = connection();
             Statement stmt = c.createStatement();
 
             // Create Schema
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS users(user_id VARCHAR (36) PRIMARY KEY, username VARCHAR (50) UNIQUE NOT NULL, password VARCHAR (50) NOT NULL, created_on TIMESTAMP NOT NULL, last_login TIMESTAMP)");
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS comments(id VARCHAR (36) PRIMARY KEY, username VARCHAR (36), body VARCHAR (500), created_on TIMESTAMP NOT NULL)");
+            stmt.executeUpdate(".CREATE TABLE IF NOT EXISTS comments(id VARCHAR (36) PRIMARY KEY, username VARCHAR (36), body VARCHAR (500), created_on TIMESTAMP NOT NULL)");
 
             // Clean up any existing data
             stmt.executeUpdate("DELETE FROM users");
-            stmt.executeUpdate("DELETE FROM comments");
+            stmt.executeUpdate("DELETE FROM COMMENTS");
 
             // Insert seed data
             insertUser("admin", "!!SuperSecretAdmin!!");
@@ -53,7 +58,7 @@ public class Postgres {
             insertComment("alice", "OMG so cute!");
             c.close();
         } catch (Exception e) {
-            System.out.println(e);
+            logger.warning(e.getMessage());
             System.exit(1);
         }
     }

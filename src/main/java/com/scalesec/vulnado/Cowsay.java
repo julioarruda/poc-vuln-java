@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
@@ -7,7 +9,11 @@ public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
     String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
+    
+    if (System.getenv("DEBUG") != null && System.getenv("DEBUG").equalsIgnoreCase("true")) {
+        System.out.println(cmd);
+    }
+
     processBuilder.command("bash", "-c", cmd);
 
     StringBuilder output = new StringBuilder();

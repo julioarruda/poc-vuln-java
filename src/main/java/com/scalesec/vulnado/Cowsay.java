@@ -1,19 +1,22 @@
+
+
 package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 
 public class Cowsay {
   public static String run(String input) {
-    ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
-    processBuilder.command("bash", "-c", cmd);
+    CommandLine cmdLine = new CommandLine("cowsay");
+    cmdLine.addArgument(input, false);
+    System.out.println(cmdLine.toString());
 
     StringBuilder output = new StringBuilder();
 
     try {
-      Process process = processBuilder.start();
+      DefaultExecutor executor = new DefaultExecutor();
       BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
       String line;
@@ -26,3 +29,4 @@ public class Cowsay {
     return output.toString();
   }
 }
+

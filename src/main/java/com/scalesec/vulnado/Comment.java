@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -35,7 +37,7 @@ public class Comment {
 
   public static List<Comment> fetch_all() {
     Statement stmt = null;
-    List<Comment> comments = new ArrayList();
+    List<Comment> comments = new ArrayList<>();
     try {
       Connection cxn = Postgres.connection();
       stmt = cxn.createStatement();
@@ -52,8 +54,7 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      // use a biblioteca de log para registrar a mensagem de erro.
     } finally {
       return comments;
     }
@@ -67,7 +68,7 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      // use a biblioteca de log para registrar a mensagem de erro.
     } finally {
       return false;
     }

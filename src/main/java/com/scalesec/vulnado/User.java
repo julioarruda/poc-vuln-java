@@ -1,8 +1,11 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -44,9 +47,10 @@ public class User {
       stmt = cxn.createStatement();
       System.out.println("Opened database successfully");
 
-      String query = "select * from users where username = '" + un + "' limit 1";
-      System.out.println(query);
-      ResultSet rs = stmt.executeQuery(query);
+      String query = "select * from users where username = ? limit 1";
+      PreparedStatement pstmt = cxn.prepareStatement(query);
+      pstmt.setString(1, un);
+      ResultSet rs = pstmt.executeQuery();
       if (rs.next()) {
         String user_id = rs.getString("user_id");
         String username = rs.getString("username");

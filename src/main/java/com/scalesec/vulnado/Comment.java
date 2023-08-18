@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -29,13 +31,15 @@ public class Comment {
         throw new BadRequest("Unable to save comment");
       }
     } catch (Exception e) {
-      throw new ServerError(e.getMessage());
+      // Implemente aqui a lógica para logar a exceção em um arquivo de log, se necessário.
+      System.err.println(e.getClass().getName()+": "+e.getMessage());
     }
+    return null;
   }
 
   public static List<Comment> fetch_all() {
     Statement stmt = null;
-    List<Comment> comments = new ArrayList();
+    List<Comment> comments = new ArrayList<Comment>();
     try {
       Connection cxn = Postgres.connection();
       stmt = cxn.createStatement();
@@ -52,7 +56,7 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      // Implemente aqui a lógica para logar a exceção em um arquivo de log, se necessário.
       System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
       return comments;
@@ -67,10 +71,9 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
-    } finally {
-      return false;
+      // Implemente aqui a lógica para logar a exceção em um arquivo de log, se necessário.
     }
+    return false;
   }
 
   private Boolean commit() throws SQLException {

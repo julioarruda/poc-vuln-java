@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -22,7 +24,6 @@ public class Postgres {
             return DriverManager.getConnection(url,
                     System.getenv("PGUSER"), System.getenv("PGPASSWORD"));
         } catch (Exception e) {
-            e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
             System.exit(1);
         }
@@ -30,7 +31,7 @@ public class Postgres {
     }
     public static void setup(){
         try {
-            System.out.println("Setting up Database...");
+            // Remover System.out.println();
             Connection c = connection();
             Statement stmt = c.createStatement();
 
@@ -53,7 +54,6 @@ public class Postgres {
             insertComment("alice", "OMG so cute!");
             c.close();
         } catch (Exception e) {
-            System.out.println(e);
             System.exit(1);
         }
     }
@@ -97,7 +97,7 @@ public class Postgres {
           pStatement.setString(3, md5(password));
           pStatement.executeUpdate();
        } catch(Exception e) {
-         e.printStackTrace();
+         // Remover e.printStackTrace();
        }
     }
 
@@ -111,7 +111,7 @@ public class Postgres {
             pStatement.setString(3, body);
             pStatement.executeUpdate();
         } catch(Exception e) {
-            e.printStackTrace();
+            // Remover e.printStackTrace();
         }
     }
 }

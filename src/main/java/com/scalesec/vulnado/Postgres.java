@@ -1,3 +1,6 @@
+-------
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -28,61 +31,52 @@ public class Postgres {
         }
         return null;
     }
-    public static void setup(){
-        try {
-            System.out.println("Setting up Database...");
-            Connection c = connection();
-            Statement stmt = c.createStatement();
+    
+    public static void setup() {
+        if (!"false".equalsIgnoreCase(System.getenv("DEBUG_MODE"))) {
+            try {
+                System.out.println("Setting up Database...");
+                Connection c = connection();
+                Statement stmt = c.createStatement();
 
-            // Create Schema
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS users(user_id VARCHAR (36) PRIMARY KEY, username VARCHAR (50) UNIQUE NOT NULL, password VARCHAR (50) NOT NULL, created_on TIMESTAMP NOT NULL, last_login TIMESTAMP)");
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS comments(id VARCHAR (36) PRIMARY KEY, username VARCHAR (36), body VARCHAR (500), created_on TIMESTAMP NOT NULL)");
+                // Create Schema
+                stmt.executeUpdate("CREATE TABLE IF NOT EXISTS users(user_id VARCHAR (36) PRIMARY KEY, username VARCHAR (50) UNIQUE NOT NULL, password VARCHAR (50) NOT NULL, created_on TIMESTAMP NOT NULL, last_login TIMESTAMP)");
+                stmt.executeUpdate("CREATE TABLE IF NOT EXISTS comments(id VARCHAR (36) PRIMARY KEY, username VARCHAR (36), body VARCHAR (500), created_on TIMESTAMP NOT NULL)");
 
-            // Clean up any existing data
-            stmt.executeUpdate("DELETE FROM users");
-            stmt.executeUpdate("DELETE FROM comments");
+                // Clean up any existing data
+                stmt.executeUpdate("DELETE FROM users");
+                stmt.executeUpdate("DELETE FROM comments");
 
-            // Insert seed data
-            insertUser("admin", "!!SuperSecretAdmin!!");
-            insertUser("alice", "AlicePassword!");
-            insertUser("bob", "BobPassword!");
-            insertUser("eve", "$EVELknev^l");
-            insertUser("rick", "!GetSchwifty!");
+                // Insert seed data
+                insertUser("admin", "!!SuperSecretAdmin!!");
+                insertUser("alice", "AlicePassword!");
+                insertUser("bob", "BobPassword!");
+                insertUser("eve", "$EVELknev^l");
+                insertUser("rick", "!GetSchwifty!");
 
-            insertComment("rick", "cool dog m8");
-            insertComment("alice", "OMG so cute!");
-            c.close();
-        } catch (Exception e) {
-            System.out.println(e);
-            System.exit(1);
+                insertComment("rick", "cool dog m8");
+                insertComment("alice", "OMG so cute!");
+                c.close();
+            } catch (Exception e) {
+                System.out.println(e);
+                System.exit(1);
+            }
         }
     }
 
     // Java program to calculate MD5 hash value
-    public static String md5(String input)
-    {
+    public static String md5(String input) {
         try {
-
-            // Static getInstance method is called with hashing MD5
             MessageDigest md = MessageDigest.getInstance("MD5");
-
-            // digest() method is called to calculate message digest
-            //  of an input digest() return array of byte
             byte[] messageDigest = md.digest(input.getBytes());
-
-            // Convert byte array into signum representation
             BigInteger no = new BigInteger(1, messageDigest);
 
-            // Convert message digest into hex value
             String hashtext = no.toString(16);
             while (hashtext.length() < 32) {
                 hashtext = "0" + hashtext;
             }
             return hashtext;
-        }
-
-        // For specifying wrong message digest algorithms
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }

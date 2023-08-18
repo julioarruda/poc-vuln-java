@@ -1,3 +1,5 @@
+
+Java
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -6,8 +8,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Comment {
+  private static final Logger logger = LogManager.getLogger(Comment.class);
   public String id, username, body;
   public Timestamp created_on;
 
@@ -52,8 +57,7 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      logger.error(e.getClass().getName() + ": " + e.getMessage(), e);
     } finally {
       return comments;
     }
@@ -67,7 +71,7 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      logger.error("Error while trying to delete comment: " + e.getMessage(), e);
     } finally {
       return false;
     }
@@ -84,3 +88,4 @@ public class Comment {
     return 1 == pStatement.executeUpdate();
   }
 }
+ 

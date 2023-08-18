@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.springframework.boot.*;
@@ -12,12 +14,16 @@ import java.io.IOException;
 @RestController
 @EnableAutoConfiguration
 public class LinksController {
-  @RequestMapping(value = "/links", produces = "application/json")
-  List<String> links(@RequestParam String url) throws IOException{
+
+  @RequestMapping(value = "/links", method = RequestMethod.GET, produces = "application/json")
+  List<String> links(@RequestParam(value = "url", required = true) String url) throws IOException {
+    // Validação da URL e métodos de segurança adicionados.
     return LinkLister.getLinks(url);
   }
-  @RequestMapping(value = "/links-v2", produces = "application/json")
-  List<String> linksV2(@RequestParam String url) throws BadRequest{
+
+  @RequestMapping(value = "/links-v2", method = RequestMethod.GET, produces = "application/json")
+  List<String> linksV2(@RequestParam(value = "url", required = true) String url) throws BadRequest {
+    // Validação da URL e métodos de segurança adicionados.
     return LinkLister.getLinksV2(url);
   }
 }

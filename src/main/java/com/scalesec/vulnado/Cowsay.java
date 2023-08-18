@@ -1,14 +1,17 @@
+
+
 package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
-    processBuilder.command("bash", "-c", cmd);
+    List<String> commandArgs = Arrays.asList("/usr/games/cowsay", input);
+    processBuilder.command(commandArgs);
 
     StringBuilder output = new StringBuilder();
 

@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -30,7 +32,8 @@ public class Postgres {
     }
     public static void setup(){
         try {
-            System.out.println("Setting up Database...");
+            // Remover a linha abaixo
+            // System.out.println("Setting up Database...");
             Connection c = connection();
             Statement stmt = c.createStatement();
 

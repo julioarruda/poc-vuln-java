@@ -1,3 +1,7 @@
+-----------------
+Apenas o Código completo com a correção:
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -52,8 +56,7 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      // Removida a função de depuração
     } finally {
       return comments;
     }
@@ -67,7 +70,7 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      // Removida a função de depuração
     } finally {
       return false;
     }

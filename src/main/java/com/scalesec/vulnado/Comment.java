@@ -1,3 +1,7 @@
+
+Aqui está o código corrigido:
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -52,8 +56,9 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      // e.printStackTrace();
+      // System.err.println(e.getClass().getName()+": "+e.getMessage());
+      System.err.println("Failed to fetch all comments");
     } finally {
       return comments;
     }

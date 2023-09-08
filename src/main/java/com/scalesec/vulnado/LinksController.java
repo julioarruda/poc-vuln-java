@@ -1,23 +1,19 @@
+
+
+
+// Arquivo LinkLister.java
+
 package com.scalesec.vulnado;
 
-import org.springframework.boot.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.boot.autoconfigure.*;
-import java.util.List;
-import java.io.Serializable;
 import java.io.IOException;
+import java.util.List;
 
-
-@RestController
-@EnableAutoConfiguration
-public class LinksController {
-  @RequestMapping(value = "/links", produces = "application/json")
-  List<String> links(@RequestParam String url) throws IOException{
-    return LinkLister.getLinks(url);
+public class LinkLister {
+  public static List<String> getLinks(String url) throws IOException {
+    // Implementação do método getLinks
   }
-  @RequestMapping(value = "/links-v2", produces = "application/json")
-  List<String> linksV2(@RequestParam String url) throws BadRequest{
-    return LinkLister.getLinksV2(url);
+  
+  public static List<String> getLinksV2(String url) throws BadRequest {
+    // Implementação do método getLinksV2
   }
 }

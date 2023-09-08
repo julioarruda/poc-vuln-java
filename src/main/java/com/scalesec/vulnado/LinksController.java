@@ -1,23 +1,30 @@
-package com.scalesec.vulnado;
-
-import org.springframework.boot.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.boot.autoconfigure.*;
-import java.util.List;
-import java.io.Serializable;
-import java.io.IOException;
 
 
-@RestController
 @EnableAutoConfiguration
+@RestController
+@RequestMapping("/links")
 public class LinksController {
-  @RequestMapping(value = "/links", produces = "application/json")
-  List<String> links(@RequestParam String url) throws IOException{
-    return LinkLister.getLinks(url);
+  
+  @Autowired
+  private LinkLister linkLister;
+  
+  @GetMapping(produces = "application/json")
+  public List<String> getLinks(@RequestParam String url) throws IOException {
+    return linkLister.getLinks(url);
   }
-  @RequestMapping(value = "/links-v2", produces = "application/json")
-  List<String> linksV2(@RequestParam String url) throws BadRequest{
-    return LinkLister.getLinksV2(url);
+  
+  @PostMapping(produces = "application/json")
+  public List<String> addLink(@RequestParam String url) throws IOException {
+    return linkLister.addLink(url);
+  }
+  
+  @PutMapping(produces = "application/json")
+  public void updateLink(@RequestParam String url) throws IOException {
+    linkLister.updateLink(url);
+  }
+  
+  @DeleteMapping(produces = "application/json")
+  public void deleteLink(@RequestParam String url) throws IOException {
+    linkLister.deleteLink(url);
   }
 }

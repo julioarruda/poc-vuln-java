@@ -1,3 +1,6 @@
+--------------------
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -22,8 +25,9 @@ public class Postgres {
             return DriverManager.getConnection(url,
                     System.getenv("PGUSER"), System.getenv("PGPASSWORD"));
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            //e.printStackTrace();
+            //System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.err.println("Exception encountered, cannot perform the operation.");
             System.exit(1);
         }
         return null;
@@ -53,7 +57,8 @@ public class Postgres {
             insertComment("alice", "OMG so cute!");
             c.close();
         } catch (Exception e) {
-            System.out.println(e);
+            //System.out.println(e);
+            System.err.println("Exception encountered during setup.");
             System.exit(1);
         }
     }
@@ -97,7 +102,8 @@ public class Postgres {
           pStatement.setString(3, md5(password));
           pStatement.executeUpdate();
        } catch(Exception e) {
-         e.printStackTrace();
+         //e.printStackTrace();
+         System.err.println("Exception encountered while inserting user.");
        }
     }
 
@@ -111,7 +117,8 @@ public class Postgres {
             pStatement.setString(3, body);
             pStatement.executeUpdate();
         } catch(Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.err.println("Exception encountered while inserting comment.");
         }
     }
 }

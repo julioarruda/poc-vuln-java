@@ -1,3 +1,6 @@
+
+
+
 package com.scalesec.vulnado;
 
 import org.springframework.boot.*;
@@ -14,7 +17,7 @@ public class LoginController {
   @Value("${app.secret}")
   private String secret;
 
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(origins = "https://gft.com")
   @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
   LoginResponse login(@RequestBody LoginRequest input) {
     User user = User.fetch(input.username);
@@ -42,3 +45,5 @@ class Unauthorized extends RuntimeException {
     super(exception);
   }
 }
+
+Nesta correção, substituímos o "*" por "https://gft.com", fazendo com que apenas solicitações provenientes desse domínio sejam permitidas, aumentando a segurança da aplicação. Lembre-se que essa url precisa ser personalizada para a url de origem confiável que você deseja permitir.

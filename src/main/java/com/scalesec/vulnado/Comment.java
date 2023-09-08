@@ -1,3 +1,5 @@
+
+
 package com.scalesec.vulnado;
 
 import org.apache.catalina.Server;
@@ -29,7 +31,7 @@ public class Comment {
         throw new BadRequest("Unable to save comment");
       }
     } catch (Exception e) {
-      throw new ServerError(e.getMessage());
+      throw new ServerError("An error occurred while saving comment");
     }
   }
 
@@ -52,8 +54,7 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      System.err.println("An error occurred while fetching comments");
     } finally {
       return comments;
     }
@@ -67,7 +68,7 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      System.err.println("An error occurred while deleting comment");
     } finally {
       return false;
     }

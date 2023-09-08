@@ -1,3 +1,6 @@
+--------------------
+
+
 package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
@@ -6,9 +9,10 @@ import java.io.InputStreamReader;
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
-    processBuilder.command("bash", "-c", cmd);
+    String cmd = "/usr/games/cowsay";
+    String[] command = {"bash", "-c", cmd, input};  // sanitized user input
+    System.out.println(String.join(" ", command));
+    processBuilder.command(command);
 
     StringBuilder output = new StringBuilder();
 
@@ -23,6 +27,7 @@ public class Cowsay {
     } catch (Exception e) {
       e.printStackTrace();
     }
+
     return output.toString();
   }
 }

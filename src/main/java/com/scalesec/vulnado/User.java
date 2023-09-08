@@ -1,3 +1,5 @@
+----------------------------
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -31,8 +33,7 @@ public class User {
         .setSigningKey(key)
         .parseClaimsJws(token);
     } catch(Exception e) {
-      e.printStackTrace();
-      throw new Unauthorized(e.getMessage());
+      throw new Unauthorized("Unauthorized");
     }
   }
 
@@ -55,8 +56,7 @@ public class User {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      throw new DatabaseException("Error connecting to database");
     } finally {
       return user;
     }

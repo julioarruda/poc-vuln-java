@@ -1,3 +1,6 @@
+
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -58,17 +61,16 @@ public class Postgres {
         }
     }
 
-    // Java program to calculate MD5 hash value
-    public static String md5(String input)
+    // Java program to calculate SHA-256 hash value
+    public static String hash(String input)
     {
         try {
-
-            // Static getInstance method is called with hashing MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            // Create a MessageDigest object for cryptographic hashing in SHA-256
+            MessageDigest sha = MessageDigest.getInstance("SHA-256");
 
             // digest() method is called to calculate message digest
             //  of an input digest() return array of byte
-            byte[] messageDigest = md.digest(input.getBytes());
+            byte[] messageDigest = sha.digest(input.getBytes("UTF-8"));
 
             // Convert byte array into signum representation
             BigInteger no = new BigInteger(1, messageDigest);
@@ -82,7 +84,7 @@ public class Postgres {
         }
 
         // For specifying wrong message digest algorithms
-        catch (NoSuchAlgorithmException e) {
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -94,7 +96,7 @@ public class Postgres {
           pStatement = connection().prepareStatement(sql);
           pStatement.setString(1, UUID.randomUUID().toString());
           pStatement.setString(2, username);
-          pStatement.setString(3, md5(password));
+          pStatement.setString(3, hash(password));
           pStatement.executeUpdate();
        } catch(Exception e) {
          e.printStackTrace();

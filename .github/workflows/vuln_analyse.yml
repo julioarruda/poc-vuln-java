@@ -25,8 +25,8 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         COMPONENT_KEY: ${{ secrets.COMPONENT_KEY }}
-        GITHUB_REPO: ${{ secrets.GITHUB_REPO }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_REPO: ${{ secrets.GH_REPO }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         OPENAI_API_URL: ${{ secrets.OPENAI_API_URL }}
         OPENAI_API_TOKEN: ${{ secrets.OPENAI_API_TOKEN }}
         OPENAI_API_ENGINE: ${{ secrets.OPENAI_API_ENGINE }}

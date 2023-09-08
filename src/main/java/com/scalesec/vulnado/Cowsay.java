@@ -1,3 +1,5 @@
+--------------------
+
 package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
@@ -7,7 +9,6 @@ public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
     String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
     processBuilder.command("bash", "-c", cmd);
 
     StringBuilder output = new StringBuilder();
@@ -26,3 +27,5 @@ public class Cowsay {
     return output.toString();
   }
 }
+
+Lembre-se: Sempre evite usar recursos de depuração nos scripts de produção. Eles devem ser usados apenas durante o desenvolvimento e os testes.

@@ -1,3 +1,6 @@
+------------------------
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -30,7 +33,6 @@ public class Postgres {
     }
     public static void setup(){
         try {
-            System.out.println("Setting up Database...");
             Connection c = connection();
             Statement stmt = c.createStatement();
 
@@ -53,8 +55,10 @@ public class Postgres {
             insertComment("alice", "OMG so cute!");
             c.close();
         } catch (Exception e) {
-            System.out.println(e);
-            System.exit(1);
+             // Use a logging framework here to handle exceptions.
+             // This is better than printing stack trace as it can be controlled better.
+             log.error("Failed to setup database", e);
+             System.exit(1);
         }
     }
 
@@ -88,30 +92,30 @@ public class Postgres {
     }
 
     private static void insertUser(String username, String password) {
-       String sql = "INSERT INTO users (user_id, username, password, created_on) VALUES (?, ?, ?, current_timestamp)";
-       PreparedStatement pStatement = null;
-       try {
-          pStatement = connection().prepareStatement(sql);
-          pStatement.setString(1, UUID.randomUUID().toString());
-          pStatement.setString(2, username);
-          pStatement.setString(3, md5(password));
-          pStatement.executeUpdate();
-       } catch(Exception e) {
-         e.printStackTrace();
-       }
-    }
+              String sql = "INSERT INTO users (user_id, username, password, created_on) VALUES (?, ?, ?, current_timestamp)";
+              PreparedStatement pStatement = null;
+              try {
+              pStatement = connection().prepareStatement(sql);
+              pStatement.setString(1, UUID.randomUUID().toString());
+              pStatement.setString(2, username);
+              pStatement.setString(3, md5(password));
+              pStatement.executeUpdate();
+              } catch(Exception e) {
+              e.printStackTrace();
+              }
+     }
 
     private static void insertComment(String username, String body) {
-        String sql = "INSERT INTO comments (id, username, body, created_on) VALUES (?, ?, ?, current_timestamp)";
-        PreparedStatement pStatement = null;
-        try {
-            pStatement = connection().prepareStatement(sql);
-            pStatement.setString(1, UUID.randomUUID().toString());
-            pStatement.setString(2, username);
-            pStatement.setString(3, body);
-            pStatement.executeUpdate();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
+              String sql = "INSERT INTO comments (id, username, body, created_on) VALUES (?, ?, ?, current_timestamp)";
+              PreparedStatement pStatement = null;
+              try {
+              pStatement = connection().prepareStatement(sql);
+              pStatement.setString(1, UUID.randomUUID().toString());
+              pStatement.setString(2, username);
+              pStatement.setString(3, body);
+              pStatement.executeUpdate();
+              } catch(Exception e) {
+              e.printStackTrace();
+              }
+     }
 }

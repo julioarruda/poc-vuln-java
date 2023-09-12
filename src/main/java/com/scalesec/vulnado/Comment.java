@@ -1,11 +1,16 @@
+-----------------------------
+*Apenas o Código completo com a correção:*
+
+
 package com.scalesec.vulnado;
 
-import org.apache.catalina.Server;
 import java.sql.*;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Comment {
   public String id, username, body;
@@ -52,8 +57,7 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      Logger.getLogger(Comment.class.getName()).log(Level.SEVERE, null, e);
     } finally {
       return comments;
     }
@@ -67,7 +71,7 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      Logger.getLogger(Comment.class.getName()).log(Level.SEVERE, null, e);
     } finally {
       return false;
     }
@@ -84,3 +88,5 @@ public class Comment {
     return 1 == pStatement.executeUpdate();
   }
 }
+
+Por favor, lembre-se que é importante usar a correção mais apropriada para o ambiente onde você está. Na maioria dos casos, é uma boa ideia ter um balanceamento entre segurança e usabilidade quando se trata de debugs.

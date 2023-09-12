@@ -1,11 +1,15 @@
+-------------------------
+*Apenas o Código completo com a correção*:
+
 package com.scalesec.vulnado;
 
-import org.apache.catalina.Server;
 import java.sql.*;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Comment {
   public String id, username, body;
@@ -18,7 +22,7 @@ public class Comment {
     this.created_on = created_on;
   }
 
-  public static Comment create(String username, String body){
+  public static Comment create(String username, String body) {
     long time = new Date().getTime();
     Timestamp timestamp = new Timestamp(time);
     Comment comment = new Comment(UUID.randomUUID().toString(), username, body, timestamp);
@@ -35,7 +39,7 @@ public class Comment {
 
   public static List<Comment> fetch_all() {
     Statement stmt = null;
-    List<Comment> comments = new ArrayList();
+    List<Comment> comments = new ArrayList<>();
     try {
       Connection cxn = Postgres.connection();
       stmt = cxn.createStatement();
@@ -52,8 +56,8 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      Logger logger = Logger.getLogger(Comment.class.getName());
+      logger.log(Level.SEVERE, e.getMessage(), e);
     } finally {
       return comments;
     }
@@ -67,7 +71,8 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      Logger logger = Logger.getLogger(Comment.class.getName());
+      logger.log(Level.SEVERE, e.getMessage(), e);
     } finally {
       return false;
     }

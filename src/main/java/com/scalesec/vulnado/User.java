@@ -1,3 +1,6 @@
+-------------------
+
+
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
@@ -8,9 +11,12 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class User {
   public String id, username, hashedPassword;
+  private static final Logger logger = LoggerFactory.getLogger(User.class);
 
   public User(String id, String username, String hashedPassword) {
     this.id = id;
@@ -42,10 +48,10 @@ public class User {
     try {
       Connection cxn = Postgres.connection();
       stmt = cxn.createStatement();
-      System.out.println("Opened database successfully");
+      logger.debug("Opened database successfully");
 
       String query = "select * from users where username = '" + un + "' limit 1";
-      System.out.println(query);
+      logger.debug(query);
       ResultSet rs = stmt.executeQuery(query);
       if (rs.next()) {
         String user_id = rs.getString("user_id");
@@ -56,7 +62,7 @@ public class User {
       cxn.close();
     } catch (Exception e) {
       e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      logger.error(e.getClass().getName()+": "+e.getMessage());
     } finally {
       return user;
     }

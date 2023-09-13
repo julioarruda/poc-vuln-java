@@ -1,3 +1,7 @@
+---------
+Abaixo segue a versão corrigida do código, considerando que os domínios https://gft.com e http://localhost:8080 são confiáveis.
+
+
 package com.scalesec.vulnado;
 
 import org.springframework.http.HttpStatus;
@@ -13,20 +17,20 @@ public class CommentsController {
   @Value("${app.secret}")
   private String secret;
 
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(origins = "https://gft.com,http://localhost:8080")
   @RequestMapping(value = "/comments", method = RequestMethod.GET, produces = "application/json")
   List<Comment> comments(@RequestHeader(value="x-auth-token") String token) {
     User.assertAuth(secret, token);
     return Comment.fetch_all();
   }
 
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(origins = "https://gft.com,http://localhost:8080")
   @RequestMapping(value = "/comments", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
   Comment createComment(@RequestHeader(value="x-auth-token") String token, @RequestBody CommentRequest input) {
     return Comment.create(input.username, input.body);
   }
 
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(origins = "https://gft.com,http://localhost:8080")
   @RequestMapping(value = "/comments/{id}", method = RequestMethod.DELETE, produces = "application/json")
   Boolean deleteComment(@RequestHeader(value="x-auth-token") String token, @PathVariable("id") String id) {
     return Comment.delete(id);
@@ -51,3 +55,5 @@ class ServerError extends RuntimeException {
     super(exception);
   }
 }
+
+Esteja ciente de que você precisa configurar adequadamente CORS em produção para restringir o acesso de acordo com a política de segurança de sua aplicação.

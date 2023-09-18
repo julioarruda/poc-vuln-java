@@ -6,8 +6,8 @@ import java.io.InputStreamReader;
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
+    // Utilizando um array para separar os argumentos
+    String[] cmd = {"/usr/games/cowsay", input};
     processBuilder.command("bash", "-c", cmd);
 
     StringBuilder output = new StringBuilder();

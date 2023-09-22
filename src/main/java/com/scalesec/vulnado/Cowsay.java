@@ -2,13 +2,15 @@ package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
+    List<String> cmd = Arrays.asList("/usr/games/cowsay", input);
     System.out.println(cmd);
-    processBuilder.command("bash", "-c", cmd);
+    processBuilder.command("bash", "-c", String.join(" ", cmd));
 
     StringBuilder output = new StringBuilder();
 
@@ -18,7 +20,7 @@ public class Cowsay {
 
       String line;
       while ((line = reader.readLine()) != null) {
-        output.append(line + "\n");
+        output.append(line).append("\n");
       }
     } catch (Exception e) {
       e.printStackTrace();

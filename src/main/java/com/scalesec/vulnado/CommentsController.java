@@ -13,20 +13,22 @@ public class CommentsController {
   @Value("${app.secret}")
   private String secret;
 
-  @CrossOrigin(origins = "*")
+  private static final String trustedOrigins = "http://trustedorigin.com"; // incluir aqui os domínios confiáveis
+
+  @CrossOrigin(origins = trustedOrigins)
   @RequestMapping(value = "/comments", method = RequestMethod.GET, produces = "application/json")
   List<Comment> comments(@RequestHeader(value="x-auth-token") String token) {
     User.assertAuth(secret, token);
     return Comment.fetch_all();
   }
 
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(origins = trustedOrigins)
   @RequestMapping(value = "/comments", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
   Comment createComment(@RequestHeader(value="x-auth-token") String token, @RequestBody CommentRequest input) {
     return Comment.create(input.username, input.body);
   }
 
-  @CrossOrigin(origins = "*")
+  @CrossOrigin(origins = trustedOrigins)
   @RequestMapping(value = "/comments/{id}", method = RequestMethod.DELETE, produces = "application/json")
   Boolean deleteComment(@RequestHeader(value="x-auth-token") String token, @PathVariable("id") String id) {
     return Comment.delete(id);

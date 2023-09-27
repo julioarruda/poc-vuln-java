@@ -52,8 +52,7 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      // Debug feature removed
     } finally {
       return comments;
     }
@@ -67,8 +66,7 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
-    } finally {
+      // Debug feature removed
       return false;
     }
   }

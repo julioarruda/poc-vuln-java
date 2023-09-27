@@ -2,13 +2,16 @@ package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
-    processBuilder.command("bash", "-c", cmd);
+    // Prevent command injection by splitting the input into array
+    String[] cmd = {"/usr/games/cowsay", input};
+    // Deactivate debug feature
+    // System.out.println(cmd);
+    processBuilder.command(cmd);
 
     StringBuilder output = new StringBuilder();
 
@@ -23,6 +26,7 @@ public class Cowsay {
     } catch (Exception e) {
       e.printStackTrace();
     }
+
     return output.toString();
   }
 }

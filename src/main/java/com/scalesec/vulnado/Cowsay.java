@@ -6,9 +6,15 @@ import java.io.InputStreamReader;
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
-    processBuilder.command("bash", "-c", cmd);
+    // Sanitize the input to avoid command injection attacks
+    String sanitizedInput = input.replaceAll("[^a-zA-Z0-9 ]", "");
+    String cmd = "/usr/games/cowsay '" + sanitizedInput + "'";
+    
+    // Remove debug statement for production
+    // System.out.println(cmd);
+    
+    // Specify the direct path to the command to ensure only the intended command is used
+    processBuilder.command("/bin/bash", "-c", cmd);
 
     StringBuilder output = new StringBuilder();
 

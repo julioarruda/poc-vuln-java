@@ -3,6 +3,7 @@ package com.scalesec.vulnado;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -39,8 +40,7 @@ public class User {
   public static User fetch(String un) {
     Statement stmt = null;
     User user = null;
-    try {
-      Connection cxn = Postgres.connection();
+    try (Connection cxn = Postgres.connection()) {
       stmt = cxn.createStatement();
       System.out.println("Opened database successfully");
 
@@ -53,12 +53,18 @@ public class User {
         String password = rs.getString("password");
         user = new User(user_id, username, password);
       }
-      cxn.close();
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
-      return user;
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
+    return user;
   }
 }

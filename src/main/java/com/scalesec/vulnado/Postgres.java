@@ -22,7 +22,6 @@ public class Postgres {
             return DriverManager.getConnection(url,
                     System.getenv("PGUSER"), System.getenv("PGPASSWORD"));
         } catch (Exception e) {
-            e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
             System.exit(1);
         }
@@ -30,7 +29,6 @@ public class Postgres {
     }
     public static void setup(){
         try {
-            System.out.println("Setting up Database...");
             Connection c = connection();
             Statement stmt = c.createStatement();
 
@@ -53,18 +51,17 @@ public class Postgres {
             insertComment("alice", "OMG so cute!");
             c.close();
         } catch (Exception e) {
-            System.out.println(e);
             System.exit(1);
         }
     }
 
-    // Java program to calculate MD5 hash value
-    public static String md5(String input)
+    // Java program to calculate SHA hash value
+    public static String sha256(String input)
     {
         try {
 
-            // Static getInstance method is called with hashing MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            // Static getInstance method is called with hashing SHA-256
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
 
             // digest() method is called to calculate message digest
             //  of an input digest() return array of byte
@@ -94,7 +91,7 @@ public class Postgres {
           pStatement = connection().prepareStatement(sql);
           pStatement.setString(1, UUID.randomUUID().toString());
           pStatement.setString(2, username);
-          pStatement.setString(3, md5(password));
+          pStatement.setString(3, sha256(password));
           pStatement.executeUpdate();
        } catch(Exception e) {
          e.printStackTrace();

@@ -28,11 +28,11 @@ public class Postgres {
         }
         return null;
     }
+
     public static void setup(){
-        try {
+        try (Connection c = connection();
+             Statement stmt = c.createStatement()) {
             System.out.println("Setting up Database...");
-            Connection c = connection();
-            Statement stmt = c.createStatement();
 
             // Create Schema
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS users(user_id VARCHAR (36) PRIMARY KEY, username VARCHAR (50) UNIQUE NOT NULL, password VARCHAR (50) NOT NULL, created_on TIMESTAMP NOT NULL, last_login TIMESTAMP)");
@@ -51,7 +51,6 @@ public class Postgres {
 
             insertComment("rick", "cool dog m8");
             insertComment("alice", "OMG so cute!");
-            c.close();
         } catch (Exception e) {
             System.out.println(e);
             System.exit(1);
@@ -88,24 +87,22 @@ public class Postgres {
     }
 
     private static void insertUser(String username, String password) {
-       String sql = "INSERT INTO users (user_id, username, password, created_on) VALUES (?, ?, ?, current_timestamp)";
-       PreparedStatement pStatement = null;
-       try {
-          pStatement = connection().prepareStatement(sql);
-          pStatement.setString(1, UUID.randomUUID().toString());
-          pStatement.setString(2, username);
-          pStatement.setString(3, md5(password));
-          pStatement.executeUpdate();
-       } catch(Exception e) {
-         e.printStackTrace();
-       }
+        String sql = "INSERT INTO users (user_id, username, password, created_on) VALUES (?, ?, ?, current_timestamp)";
+        try (Connection conn = connection();
+             PreparedStatement pStatement = conn.prepareStatement(sql)) {
+            pStatement.setString(1, UUID.randomUUID().toString());
+            pStatement.setString(2, username);
+            pStatement.setString(3, md5(password));
+            pStatement.executeUpdate();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void insertComment(String username, String body) {
         String sql = "INSERT INTO comments (id, username, body, created_on) VALUES (?, ?, ?, current_timestamp)";
-        PreparedStatement pStatement = null;
-        try {
-            pStatement = connection().prepareStatement(sql);
+        try (Connection conn = connection();
+             PreparedStatement pStatement = conn.prepareStatement(sql)) {
             pStatement.setString(1, UUID.randomUUID().toString());
             pStatement.setString(2, username);
             pStatement.setString(3, body);

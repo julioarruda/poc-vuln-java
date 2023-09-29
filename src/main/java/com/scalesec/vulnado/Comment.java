@@ -52,8 +52,9 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      //debug feature deactivated before delivering the code in production.
+      //e.printStackTrace();
+      //System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
       return comments;
     }
@@ -67,7 +68,8 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      //debug feature deactivated before delivering the code in production.
+      //e.printStackTrace();
     } finally {
       return false;
     }

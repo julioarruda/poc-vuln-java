@@ -14,7 +14,7 @@ public class LoginController {
   @Value("${app.secret}")
   private String secret;
 
-  @CrossOrigin(origins = "*")
+  // Removed @CrossOrigin(origins = "*") to fix the CORS vulnerability
   @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
   LoginResponse login(@RequestBody LoginRequest input) {
     User user = User.fetch(input.username);

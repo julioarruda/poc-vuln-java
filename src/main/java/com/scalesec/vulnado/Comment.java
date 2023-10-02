@@ -52,7 +52,7 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      // Removed e.printStackTrace() to prevent debug info from being shown in production
       System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
       return comments;
@@ -67,7 +67,7 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      // Removed e.printStackTrace() to prevent debug info from being shown in production
     } finally {
       return false;
     }

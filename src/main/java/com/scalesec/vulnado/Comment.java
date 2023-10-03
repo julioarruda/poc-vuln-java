@@ -39,7 +39,6 @@ public class Comment {
     try {
       Connection cxn = Postgres.connection();
       stmt = cxn.createStatement();
-
       String query = "select * from comments;";
       ResultSet rs = stmt.executeQuery(query);
       while (rs.next()) {
@@ -52,7 +51,7 @@ public class Comment {
       }
       cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      // e.printStackTrace();
       System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
       return comments;
@@ -67,7 +66,7 @@ public class Comment {
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
+      // e.printStackTrace();
     } finally {
       return false;
     }

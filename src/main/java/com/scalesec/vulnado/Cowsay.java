@@ -5,10 +5,15 @@ import java.io.InputStreamReader;
 
 public class Cowsay {
   public static String run(String input) {
+    if (input == null || input.contains("'")) {
+      throw new IllegalArgumentException("Invalid input");
+    }
     ProcessBuilder processBuilder = new ProcessBuilder();
     String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
-    processBuilder.command("bash", "-c", cmd);
+    // Remove debug print statement
+    // System.out.println(cmd);
+    processBuilder.command("/bin/bash", "-c", cmd);
+    processBuilder.environment().put("PATH", "/usr/games");
 
     StringBuilder output = new StringBuilder();
 

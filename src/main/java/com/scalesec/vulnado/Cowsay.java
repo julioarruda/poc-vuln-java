@@ -6,9 +6,10 @@ import java.io.InputStreamReader;
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
-    processBuilder.command("bash", "-c", cmd);
+    String cmd = "/usr/games/cowsay";
+    // Ensure command includes only what you intend
+    processBuilder.command("bash", "-c", cmd, input);
+    processBuilder.environment().put("PATH", "/usr/games/"); // Ensure PATH used includes only what you intend
 
     StringBuilder output = new StringBuilder();
 
@@ -23,6 +24,10 @@ public class Cowsay {
     } catch (Exception e) {
       e.printStackTrace();
     }
+
+    // Ensure debug feature is deactivated before delivering the code in production
+    // System.out.println(cmd);
+
     return output.toString();
   }
 }

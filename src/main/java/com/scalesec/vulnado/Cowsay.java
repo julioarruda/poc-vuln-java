@@ -2,13 +2,17 @@ package com.scalesec.vulnado;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class Cowsay {
   public static String run(String input) {
     ProcessBuilder processBuilder = new ProcessBuilder();
-    String cmd = "/usr/games/cowsay '" + input + "'";
-    System.out.println(cmd);
-    processBuilder.command("bash", "-c", cmd);
+    String cmd = "/usr/games/cowsay";
+    // prevent command injection
+    processBuilder.command("bash", "-c", cmd, "--", input);
+    
+    // set a secure PATH
+    processBuilder.environment().put("PATH", "/usr/games");
 
     StringBuilder output = new StringBuilder();
 

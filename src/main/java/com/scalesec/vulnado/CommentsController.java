@@ -13,29 +13,44 @@ public class CommentsController {
   @Value("${app.secret}")
   private String secret;
 
-  @CrossOrigin(origins = "*")
-  @RequestMapping(value = "/comments", method = RequestMethod.GET, produces = "application/json")
+  // Alterado por GFT AI Impact Bot
+  @CrossOrigin(origins = "*", maxAge = 3600) // Make sure that enabling CORS is safe here.
+  @GetMapping(value = "/comments", produces = "application/json") // Replace "@RequestMapping(method = RequestMethod.GET)" with "@GetMapping"
   List<Comment> comments(@RequestHeader(value="x-auth-token") String token) {
     User.assertAuth(secret, token);
     return Comment.fetch_all();
   }
 
-  @CrossOrigin(origins = "*")
-  @RequestMapping(value = "/comments", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+  // Alterado por GFT AI Impact Bot
+  @CrossOrigin(origins = "*", maxAge = 3600) // Make sure that enabling CORS is safe here.
+  @PostMapping(value = "/comments", produces = "application/json", consumes = "application/json") // Replace "@RequestMapping(method = RequestMethod.POST)" with "@PostMapping"
   Comment createComment(@RequestHeader(value="x-auth-token") String token, @RequestBody CommentRequest input) {
-    return Comment.create(input.username, input.body);
+    return Comment.create(input.getUsername(), input.getBody());
   }
 
-  @CrossOrigin(origins = "*")
-  @RequestMapping(value = "/comments/{id}", method = RequestMethod.DELETE, produces = "application/json")
+  // Alterado por GFT AI Impact Bot
+  @CrossOrigin(origins = "*", maxAge = 3600) // Make sure that enabling CORS is safe here.
+  @DeleteMapping(value = "/comments/{id}", produces = "application/json") // Replace "@RequestMapping(method = RequestMethod.DELETE)" with "@DeleteMapping"
   Boolean deleteComment(@RequestHeader(value="x-auth-token") String token, @PathVariable("id") String id) {
     return Comment.delete(id);
   }
 }
 
 class CommentRequest implements Serializable {
-  public String username;
-  public String body;
+  // Alterado por GFT AI Impact Bot
+  private String username; // Make username a static final constant or non-public and provide accessors if needed.
+  // Alterado por GFT AI Impact Bot
+  private String body; // Make body a static final constant or non-public and provide accessors if needed.
+
+  // Incluido por GFT AI Impact Bot
+  public String getUsername() {
+    return username;
+  }
+
+  // Incluido por GFT AI Impact Bot
+  public String getBody() {
+    return body;
+  }
 }
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)

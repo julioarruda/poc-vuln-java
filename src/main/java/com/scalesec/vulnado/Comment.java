@@ -1,21 +1,26 @@
 package com.scalesec.vulnado;
 
-import org.apache.catalina.Server;
+// Removed unused import 'org.apache.catalina.Server'; - Alterado por GFT AI Impact Bot
 import java.sql.*;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Logger; // Incluido por GFT AI Impact Bot
 
 public class Comment {
-  public String id, username, body;
-  public Timestamp created_on;
+  private static final Logger logger = Logger.getLogger(Comment.class.getName()); // Incluido por GFT AI Impact Bot
 
-  public Comment(String id, String username, String body, Timestamp created_on) {
+  private String id; // Alterado por GFT AI Impact Bot
+  private String username; // Alterado por GFT AI Impact Bot
+  private String body; // Alterado por GFT AI Impact Bot
+  private Timestamp createdOn; // Alterado por GFT AI Impact Bot
+
+  public Comment(String id, String username, String body, Timestamp createdOn) { // Alterado por GFT AI Impact Bot
     this.id = id;
     this.username = username;
     this.body = body;
-    this.created_on = created_on;
+    this.createdOn = createdOn; // Alterado por GFT AI Impact Bot
   }
 
   public static Comment create(String username, String body){
@@ -35,9 +40,8 @@ public class Comment {
 
   public static List<Comment> fetch_all() {
     Statement stmt = null;
-    List<Comment> comments = new ArrayList();
-    try {
-      Connection cxn = Postgres.connection();
+    List<Comment> comments = new ArrayList<>();
+    try (Connection cxn = Postgres.connection()) { // Alterado por GFT AI Impact Bot
       stmt = cxn.createStatement();
 
       String query = "select * from comments;";
@@ -46,41 +50,38 @@ public class Comment {
         String id = rs.getString("id");
         String username = rs.getString("username");
         String body = rs.getString("body");
-        Timestamp created_on = rs.getTimestamp("created_on");
-        Comment c = new Comment(id, username, body, created_on);
+        Timestamp createdOn = rs.getTimestamp("created_on"); // Alterado por GFT AI Impact Bot
+        Comment c = new Comment(id, username, body, createdOn); // Alterado por GFT AI Impact Bot
         comments.add(c);
       }
-      cxn.close();
     } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
-    } finally {
-      return comments;
+      logger.severe(e.getClass().getName()+": "+e.getMessage()); // Alterado por GFT AI Impact Bot
     }
+    return comments; // Alterado por GFT AI Impact Bot
   }
 
-  public static Boolean delete(String id) {
-    try {
-      String sql = "DELETE FROM comments where id = ?";
-      Connection con = Postgres.connection();
-      PreparedStatement pStatement = con.prepareStatement(sql);
+  public static boolean delete(String id) { // Alterado por GFT AI Impact Bot
+    boolean result = false; // Incluido por GFT AI Impact Bot
+    try (Connection con = Postgres.connection(); // Alterado por GFT AI Impact Bot
+         PreparedStatement pStatement = con.prepareStatement("DELETE FROM comments where id = ?")) { // Alterado por GFT AI Impact Bot
       pStatement.setString(1, id);
-      return 1 == pStatement.executeUpdate();
+      result = 1 == pStatement.executeUpdate();
     } catch(Exception e) {
-      e.printStackTrace();
-    } finally {
-      return false;
+      logger.severe(e.getMessage()); // Alterado por GFT AI Impact Bot
     }
+    return result; // Alterado por GFT AI Impact Bot
   }
 
-  private Boolean commit() throws SQLException {
-    String sql = "INSERT INTO comments (id, username, body, created_on) VALUES (?,?,?,?)";
-    Connection con = Postgres.connection();
-    PreparedStatement pStatement = con.prepareStatement(sql);
-    pStatement.setString(1, this.id);
-    pStatement.setString(2, this.username);
-    pStatement.setString(3, this.body);
-    pStatement.setTimestamp(4, this.created_on);
-    return 1 == pStatement.executeUpdate();
+  private boolean commit() throws SQLException { // Alterado por GFT AI Impact Bot
+    boolean result = false; // Incluido por GFT AI Impact Bot
+    try (Connection con = Postgres.connection(); // Alterado por GFT AI Impact Bot
+         PreparedStatement pStatement = con.prepareStatement("INSERT INTO comments (id, username, body, created_on) VALUES (?,?,?,?)")) { // Alterado por GFT AI Impact Bot
+      pStatement.setString(1, this.id);
+      pStatement.setString(2, this.username);
+      pStatement.setString(3, this.body);
+      pStatement.setTimestamp(4, this.createdOn); // Alterado por GFT AI Impact Bot
+      result = 1 == pStatement.executeUpdate();
+    }
+    return result; // Alterado por GFT AI Impact Bot
   }
 }

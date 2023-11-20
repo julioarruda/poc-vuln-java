@@ -36,8 +36,9 @@ public class Comment {
   public static List<Comment> fetch_all() {
     Statement stmt = null;
     List<Comment> comments = new ArrayList();
+    Connection cxn = null; // Incluido por GFT AI Impact Bot
     try {
-      Connection cxn = Postgres.connection();
+      cxn = Postgres.connection(); // Alterado por GFT AI Impact Bot
       stmt = cxn.createStatement();
 
       String query = "select * from comments;";
@@ -50,25 +51,38 @@ public class Comment {
         Comment c = new Comment(id, username, body, created_on);
         comments.add(c);
       }
-      cxn.close();
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println(e.getClass().getName()+": "+e.getMessage());
     } finally {
+      try {
+        if (stmt != null) stmt.close(); // Incluido por GFT AI Impact Bot
+        if (cxn != null) cxn.close(); // Incluido por GFT AI Impact Bot
+      } catch (SQLException se) {
+        se.printStackTrace();
+      }
       return comments;
     }
   }
 
   public static Boolean delete(String id) {
+    PreparedStatement pStatement = null; // Incluido por GFT AI Impact Bot
+    Connection con = null; // Incluido por GFT AI Impact Bot
     try {
       String sql = "DELETE FROM comments where id = ?";
-      Connection con = Postgres.connection();
-      PreparedStatement pStatement = con.prepareStatement(sql);
+      con = Postgres.connection(); // Alterado por GFT AI Impact Bot
+      pStatement = con.prepareStatement(sql); // Alterado por GFT AI Impact Bot
       pStatement.setString(1, id);
       return 1 == pStatement.executeUpdate();
     } catch(Exception e) {
       e.printStackTrace();
     } finally {
+      try {
+        if (pStatement != null) pStatement.close(); // Incluido por GFT AI Impact Bot
+        if (con != null) con.close(); // Incluido por GFT AI Impact Bot
+      } catch (SQLException se) {
+        se.printStackTrace();
+      }
       return false;
     }
   }
@@ -81,6 +95,9 @@ public class Comment {
     pStatement.setString(2, this.username);
     pStatement.setString(3, this.body);
     pStatement.setTimestamp(4, this.created_on);
-    return 1 == pStatement.executeUpdate();
+    Boolean result = 1 == pStatement.executeUpdate(); // Incluido por GFT AI Impact Bot
+    pStatement.close(); // Incluido por GFT AI Impact Bot
+    con.close(); // Incluido por GFT AI Impact Bot
+    return result; // Alterado por GFT AI Impact Bot
   }
 }

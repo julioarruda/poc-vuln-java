@@ -10,13 +10,17 @@ $(document).ready(function(){
   // Helper Functions
   function setupDeleteCommentHandler() {
     // NOTE: This needs to come first since comments aren't loaded yet.
-    $('.delete-comment').click(function(){
+    $('.delete-comment').click(function(e){
+      e.preventDefault(); // Alterado por GFT AI Impact Bot
       var parent = this.closest(".row");
       var id = $(parent).data("comment_id");
 
       $.ajax({
         type: "DELETE",
-        url: "http://localhost:8080/comments/" + id
+        url: "http://localhost:8080/comments/" + id,
+        beforeSend: function(xhr) { // Incluido por GFT AI Impact Bot
+          xhr.setRequestHeader('x-auth-token', localStorage.jwt); // Incluido por GFT AI Impact Bot
+        } // Incluido por GFT AI Impact Bot
       }).done(function(){
         $(parent).remove();
       });
@@ -36,7 +40,8 @@ $(document).ready(function(){
   }
 
   //Event Handlers
-  $('#submit-comment').click(function(){
+  $('#submit-comment').click(function(e){
+    e.preventDefault(); // Alterado por GFT AI Impact Bot
     var comment = $('#new-comment').val();
     var username = localStorage.username;
     $.ajax({
@@ -45,6 +50,9 @@ $(document).ready(function(){
       data: JSON.stringify({username: username, body: comment}),
       dataType: "json",
       contentType: "application/json",
+      beforeSend: function(xhr) { // Incluido por GFT AI Impact Bot
+        xhr.setRequestHeader('x-auth-token', localStorage.jwt); // Incluido por GFT AI Impact Bot
+      } // Incluido por GFT AI Impact Bot
     }).done(function(){
         $('#new-comment').val('');
         fetchComments();

@@ -61,19 +61,20 @@ public class Comment {
       } catch (SQLException se) {
         se.printStackTrace();
       }
-      return comments;
     }
+    return comments; // Alterado por GFT AI Impact Bot
   }
 
   public static Boolean delete(String id) {
     PreparedStatement pStatement = null; // Incluido por GFT AI Impact Bot
     Connection con = null; // Incluido por GFT AI Impact Bot
+    Boolean result = false; // Incluido por GFT AI Impact Bot
     try {
       String sql = "DELETE FROM comments where id = ?";
       con = Postgres.connection(); // Alterado por GFT AI Impact Bot
       pStatement = con.prepareStatement(sql); // Alterado por GFT AI Impact Bot
       pStatement.setString(1, id);
-      return 1 == pStatement.executeUpdate();
+      result = 1 == pStatement.executeUpdate();
     } catch(Exception e) {
       e.printStackTrace();
     } finally {
@@ -83,14 +84,15 @@ public class Comment {
       } catch (SQLException se) {
         se.printStackTrace();
       }
-      return false;
     }
+    return result; // Alterado por GFT AI Impact Bot
   }
 
   private Boolean commit() throws SQLException {
     String sql = "INSERT INTO comments (id, username, body, created_on) VALUES (?,?,?,?)";
     Connection con = null; // Incluido por GFT AI Impact Bot
     PreparedStatement pStatement = null; // Incluido por GFT AI Impact Bot
+    Boolean result = false; // Incluido por GFT AI Impact Bot
     try {
       con = Postgres.connection(); // Alterado por GFT AI Impact Bot
       pStatement = con.prepareStatement(sql); // Alterado por GFT AI Impact Bot
@@ -98,7 +100,7 @@ public class Comment {
       pStatement.setString(2, this.username);
       pStatement.setString(3, this.body);
       pStatement.setTimestamp(4, this.created_on);
-      return 1 == pStatement.executeUpdate();
+      result = 1 == pStatement.executeUpdate();
     } finally {
       try {
         if (pStatement != null) pStatement.close(); // Incluido por GFT AI Impact Bot
@@ -107,5 +109,6 @@ public class Comment {
         se.printStackTrace();
       }
     }
+    return result; // Alterado por GFT AI Impact Bot
   }
 }

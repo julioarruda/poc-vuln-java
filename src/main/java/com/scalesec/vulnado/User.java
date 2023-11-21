@@ -64,7 +64,7 @@ public class User {
       } catch (Exception e) {
         e.printStackTrace();
       }
-      return user; // Alterado por GFT AI Impact Bot
     }
+    return user; // Alterado por GFT AI Impact Bot
   }
 }

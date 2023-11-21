@@ -12,6 +12,12 @@ RUN apt-get update && \
 # Mudando para o usuário não root
 USER appuser
 
-COPY . .
+# Incluido por GFT AI Impact Bot
+# Copiando o diretório atual para o diretório /app
+COPY . /app
+
+# Incluido por GFT AI Impact Bot
+# Mudando para o diretório /app
+WORKDIR /app
 
 CMD ["mvn", "spring-boot:run"]

@@ -11,7 +11,7 @@ $(document).ready(function(){
   function setupDeleteCommentHandler() {
     // NOTE: This needs to come first since comments aren't loaded yet.
     $('.delete-comment').click(function(e){
-      e.preventDefault(); // Incluido por GFT AI Impact Bot
+      e.preventDefault(); // Alterado por GFT AI Impact Bot
       var parent = this.closest(".row");
       var id = $(parent).data("comment_id");
 
@@ -41,7 +41,7 @@ $(document).ready(function(){
 
   //Event Handlers
   $('#submit-comment').click(function(e){
-    e.preventDefault(); // Incluido por GFT AI Impact Bot
+    e.preventDefault(); // Alterado por GFT AI Impact Bot
     var comment = $('#new-comment').val();
     var username = localStorage.username;
     $.ajax({

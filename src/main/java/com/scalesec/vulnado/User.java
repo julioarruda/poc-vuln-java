@@ -1,7 +1,7 @@
 package com.scalesec.vulnado;
 
 import java.sql.Connection;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtParser;
@@ -37,17 +37,15 @@ public class User {
   }
 
   public static User fetch(String un) {
-    Statement stmt = null;
+    PreparedStatement pStatement = null;
     User user = null;
-    Connection cxn = null; // Incluido por GFT AI Impact Bot
+    Connection cxn = null;
     try {
-      cxn = Postgres.connection(); // Alterado por GFT AI Impact Bot
-      stmt = cxn.createStatement();
-      System.out.println("Opened database successfully");
-
-      String query = "select * from users where username = '" + un + "' limit 1";
-      System.out.println(query);
-      ResultSet rs = stmt.executeQuery(query);
+      cxn = Postgres.connection();
+      String query = "SELECT * FROM users WHERE username = ? LIMIT 1";
+      pStatement = cxn.prepareStatement(query);
+      pStatement.setString(1, un);
+      ResultSet rs = pStatement.executeQuery();
       if (rs.next()) {
         String user_id = rs.getString("user_id");
         String username = rs.getString("username");
@@ -56,15 +54,15 @@ public class User {
       }
     } catch (Exception e) {
       e.printStackTrace();
-      System.err.println(e.getClass().getName()+": "+e.getMessage());
+      System.err.println(e.getClass().getName() + ": " + e.getMessage());
     } finally {
       try {
-        if (stmt != null) stmt.close(); // Incluido por GFT AI Impact Bot
-        if (cxn != null) cxn.close(); // Incluido por GFT AI Impact Bot
+        if (pStatement != null) pStatement.close();
+        if (cxn != null) cxn.close();
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
-    return user; // Alterado por GFT AI Impact Bot
+    return user;
   }
 }
